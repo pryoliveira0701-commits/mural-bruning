@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mural do Orgulho — Gestão de Projetos | Bruning</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Inter', sans-serif; background: #f5f4f0; color: #1a1a1a; min-height: 100vh; }
+.container { max-width: 700px; margin: 0 auto; padding: 2rem 1rem 4rem; }
+.header { text-align: center; margin-bottom: 1.5rem; }
+.header h1 { font-size: 24px; font-weight: 600; color: #1a1a1a; margin-bottom: 4px; display: flex; align-items: center; justify-content: center; gap: 8px; flex-wrap: wrap; }
+.header p { font-size: 14px; color: #666; }
+.live-badge { display: inline-flex; align-items: center; gap: 4px; font-size: 11px; font-weight: 500; color: #0F6E56; background: #E1F5EE; border-radius: 99px; padding: 3px 10px; }
+.live-dot { width: 7px; height: 7px; border-radius: 50%; background: #1D9E75; animation: pulse 1.5s infinite; }
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+.tabs { display: flex; gap: 6px; justify-content: center; margin-bottom: 2rem; flex-wrap: wrap; background: #eeede8; border-radius: 12px; padding: 6px; }
+.tab { padding: 8px 16px; border-radius: 8px; border: none; background: transparent; font-size: 14px; cursor: pointer; color: #666; transition: all 0.15s; display: flex; align-items: center; gap: 6px; font-family: 'Inter', sans-serif; font-weight: 500; }
+.tab.active { background: white; color: #1a1a1a; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+.section { max-width: 540px; margin: 0 auto; }
+.field { margin-bottom: 1.25rem; }
+.field label { display: block; font-size: 13px; color: #666; margin-bottom: 6px; font-weight: 500; }
+.field input, .field textarea { width: 100%; border-radius: 10px; border: 1px solid #ddd; padding: 10px 12px; font-size: 14px; font-family: 'Inter', sans-serif; background: white; color: #1a1a1a; resize: none; outline: none; transition: border 0.15s; }
+.field input:focus, .field textarea:focus { border-color: #7F77DD; }
+.field textarea { height: 90px; }
+.emoji-grid { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 6px; }
+.emoji-btn { width: 40px; height: 40px; border-radius: 8px; border: 1px solid #e0e0e0; background: #f5f4f0; font-size: 20px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.15s; }
+.emoji-btn.selected { border: 2px solid #7F77DD; transform: scale(1.1); background: #EEEDFE; }
+.color-grid { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 6px; }
+.color-btn { width: 34px; height: 34px; border-radius: 50%; border: 3px solid transparent; cursor: pointer; transition: all 0.15s; }
+.color-btn.selected { border-color: #1a1a1a; transform: scale(1.15); }
+.btn-primary { width: 100%; padding: 12px; border-radius: 10px; border: 1px solid #ddd; background: #f0efeb; font-size: 15px; font-weight: 500; cursor: pointer; color: #1a1a1a; transition: all 0.15s; margin-top: 0.5rem; display: flex; align-items: center; justify-content: center; gap: 8px; font-family: 'Inter', sans-serif; }
+.btn-primary:hover { background: #e5e4e0; }
+.btn-hero { width: 100%; padding: 14px; border-radius: 12px; border: none; background: #7F77DD; font-size: 16px; font-weight: 500; cursor: pointer; color: white; transition: all 0.15s; display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 1.5rem; font-family: 'Inter', sans-serif; }
+.btn-hero:hover { background: #534AB7; transform: translateY(-1px); }
+.success-msg { text-align: center; padding: 10px; background: #d4edda; color: #155724; border-radius: 10px; font-size: 13px; margin-top: 12px; display: none; }
+.vote-option { padding: 14px 16px; border-radius: 12px; border: 1px solid #e0e0e0; background: white; margin-bottom: 10px; cursor: pointer; transition: all 0.15s; }
+.vote-option:hover { border-color: #bbb; background: #fafaf8; }
+.vote-option.selected { border: 2px solid #7F77DD; background: #EEEDFE; }
+.vote-option.leading { border: 2px solid #1D9E75; background: #E1F5EE; }
+.vote-option.winner { border: 2px solid #1D9E75; background: #E1F5EE; }
+.vote-top { display: flex; align-items: flex-start; gap: 10px; }
+.vote-radio { width: 18px; height: 18px; border-radius: 50%; border: 2px solid #ccc; margin-top: 2px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
+.vote-option.selected .vote-radio { border-color: #7F77DD; background: #7F77DD; }
+.vote-option.selected .vote-radio::after { content:''; width:7px; height:7px; border-radius:50%; background:white; display:block; }
+.vote-text { flex: 1; font-size: 14px; color: #1a1a1a; line-height: 1.45; }
+.vote-meta { display: flex; align-items: center; gap: 8px; margin-top: 8px; }
+.vote-bar-wrap { flex: 1; height: 6px; background: #eee; border-radius: 99px; overflow: hidden; }
+.vote-bar { height: 100%; border-radius: 99px; background: #AFA9EC; transition: width 0.5s; }
+.vote-option.leading .vote-bar, .vote-option.winner .vote-bar { background: #1D9E75; }
+.vote-count { font-size: 12px; color: #888; min-width: 36px; text-align: right; white-space: nowrap; }
+.leading-badge, .winner-badge { font-size: 11px; font-weight: 500; color: #0F6E56; background: #9FE1CB; padding: 2px 8px; border-radius: 99px; white-space: nowrap; }
+.custom-input-wrap { display: flex; gap: 8px; margin-top: 6px; }
+.custom-input-wrap input { flex: 1; }
+.custom-input-wrap button { padding: 0 16px; border-radius: 10px; border: 1px solid #ddd; background: #f0efeb; cursor: pointer; font-size: 13px; color: #1a1a1a; white-space: nowrap; font-family: 'Inter', sans-serif; }
+.deadline-badge { display: inline-flex; align-items: center; gap: 6px; background: #f0efeb; border: 1px solid #e0e0e0; border-radius: 99px; padding: 4px 14px; font-size: 12px; color: #666; margin-bottom: 1rem; }
+.voting-closed { text-align: center; padding: 10px 16px; background: #E1F5EE; color: #0F6E56; border-radius: 10px; font-size: 13px; margin-bottom: 1rem; display: none; }
+.countdown { font-size: 13px; color: #888; text-align: center; margin-bottom: 1rem; }
+.countdown span { font-weight: 600; color: #1a1a1a; }
+.total-votes { font-size: 12px; color: #888; text-align: center; margin-bottom: 1rem; }
+.mural-header { text-align: center; margin-bottom: 1rem; }
+.mural-title-display { font-size: 20px; font-weight: 600; color: #1a1a1a; margin-bottom: 4px; line-height: 1.3; }
+.mural-subtitle { font-size: 13px; color: #888; margin-bottom: 1rem; }
+.count-badge { display: inline-flex; align-items: center; gap: 6px; background: #f0efeb; border: 1px solid #e0e0e0; border-radius: 99px; padding: 4px 14px; font-size: 13px; color: #666; margin-bottom: 1rem; }
+.puzzle-wrap { display: flex; justify-content: center; overflow-x: auto; }
+.btn-print { display: flex; align-items: center; gap: 8px; margin: 1rem auto 0; padding: 10px 24px; border-radius: 10px; border: 1px solid #ddd; background: white; font-size: 14px; cursor: pointer; color: #1a1a1a; width: fit-content; font-family: 'Inter', sans-serif; }
+.empty-state { text-align: center; padding: 3rem 1rem; color: #aaa; }
+.divider { border: none; border-top: 1px solid #eee; margin: 1.25rem 0; }
+.welcome { max-width: 540px; margin: 0 auto; }
+.welcome-hero { text-align: center; padding: 1.5rem 1rem 1rem; }
+.welcome-emoji { font-size: 56px; display: block; margin-bottom: 1rem; }
+.welcome-title { font-size: 24px; font-weight: 600; color: #1a1a1a; margin-bottom: 10px; line-height: 1.3; }
+.welcome-sub { font-size: 15px; color: #555; line-height: 1.7; }
+.welcome-sub strong { color: #1a1a1a; font-weight: 600; }
+.steps { margin: 1.5rem 0; display: flex; flex-direction: column; gap: 12px; }
+.step { display: flex; gap: 14px; align-items: flex-start; padding: 16px; border-radius: 12px; border: 1px solid #e8e8e8; background: white; }
+.step-num { width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 600; flex-shrink: 0; }
+.s1{background:#EEEDFE;color:#534AB7} .s2{background:#E1F5EE;color:#0F6E56} .s3{background:#FAECE7;color:#993C1D} .s4{background:#E6F1FB;color:#185FA5}
+.step-title { font-size: 14px; font-weight: 600; color: #1a1a1a; margin-bottom: 4px; display: flex; align-items: center; gap: 6px; }
+.step-desc { font-size: 13px; color: #666; line-height: 1.55; }
+.step-desc strong { color: #1a1a1a; font-weight: 500; }
+.tip-box { background: #f5f4f0; border-radius: 12px; padding: 14px 16px; margin: 1rem 0; display: flex; gap: 10px; align-items: flex-start; }
+.tip-text { font-size: 13px; color: #666; line-height: 1.55; }
+.tip-text strong { color: #1a1a1a; }
+.deadline-box { text-align: center; padding: 14px; background: #EEEDFE; border-radius: 12px; margin: 1rem 0; }
+.deadline-box p { font-size: 13px; color: #534AB7; }
+.deadline-box strong { font-size: 15px; font-weight: 600; }
+.photo-area { border: 2px dashed #ccc; border-radius: 12px; padding: 20px; text-align: center; cursor: pointer; transition: all 0.15s; position: relative; background: white; }
+.photo-area:hover { border-color: #7F77DD; }
+.photo-area input[type="file"] { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
+.photo-preview { width: 72px; height: 72px; border-radius: 50%; object-fit: cover; border: 3px solid white; box-shadow: 0 0 0 2px #AFA9EC; display: none; margin: 0 auto 8px; }
+.photo-upload-text { font-size: 13px; color: #888; }
+.photo-upload-text strong { color: #7F77DD; }
+.info-banner { background: #f5f4f0; border-radius: 12px; padding: 12px 16px; margin-bottom: 1.25rem; font-size: 13px; color: #666; display: flex; gap: 8px; align-items: flex-start; }
+.loading-state { text-align: center; padding: 2rem; color: #aaa; font-size: 14px; }
+@media (max-width: 480px) { .container{padding:1rem 0.75rem 3rem} .welcome-title{font-size:20px} .tab{padding:7px 10px;font-size:13px} }
+@media print {
+  body{background:white} .tabs,.header p,.btn-print,.deadline-badge,.count-badge,.countdown,.total-votes,.info-banner,.live-badge{display:none!important}
+  #tab-form,#tab-vote,#tab-welcome{display:none!important} #tab-mural{display:block!important} .container{padding:1rem;max-width:100%}
+}
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <h1>Mural do orgulho <span class="live-badge"><span class="live-dot"></span> ao vivo</span></h1>
+    <p>Semana da cultura — Gestão de Projetos · Bruning</p>
+  </div>
+  <div class="tabs">
+    <button class="tab active" onclick="showTab('welcome')" id="tab-btn-welcome"><i class="ti ti-home"></i> Início</button>
+    <button class="tab" onclick="showTab('vote')" id="tab-btn-vote"><i class="ti ti-check-circle"></i> Votar</button>
+    <button class="tab" onclick="showTab('form')" id="tab-btn-form"><i class="ti ti-pencil"></i> Minha história</button>
+    <button class="tab" onclick="showTab('mural')" id="tab-btn-mural"><i class="ti ti-layout-grid"></i> Mural</button>
+  </div>
+
+  <div id="tab-welcome" class="welcome">
+    <div class="welcome-hero">
+      <span class="welcome-emoji">🧩</span>
+      <div class="welcome-title">Cada história é uma peça.<br>Juntas, formamos o mural do orgulho.</div>
+      <p class="welcome-sub">Estamos na semana da cultura na <strong>Bruning</strong>, e na quarta celebramos o que nos move: <strong>nossos clientes.</strong> Participe votando no título do mural e compartilhando sua história.</p>
+    </div>
+    <div class="steps">
+      <div class="step"><div class="step-num s1">1</div><div class="step-body"><div class="step-title"><i class="ti ti-check-circle"></i> Vote no título do mural</div><div class="step-desc">Escolha a frase que melhor representa a relação da nossa área com os clientes. <strong>Votação aberta até 20/05 às 12h.</strong></div></div></div>
+      <div class="step"><div class="step-num s2">2</div><div class="step-body"><div class="step-title"><i class="ti ti-pencil"></i> Compartilhe sua história</div><div class="step-desc">Vá em <strong>"Minha história"</strong>, adicione sua foto e conte um momento marcante com um cliente — interno ou externo.</div></div></div>
+      <div class="step"><div class="step-num s3">3</div><div class="step-body"><div class="step-title"><i class="ti ti-repeat"></i> Adicione quantas histórias quiser</div><div class="step-desc"><strong>Não precisa parar em uma!</strong> Cada história vira uma nova peça no mural, salva e visível para todo o time.</div></div></div>
+      <div class="step"><div class="step-num s4">4</div><div class="step-body"><div class="step-title"><i class="ti ti-layout-grid"></i> Veja o mural ao vivo</div><div class="step-desc">Em <strong>"Mural"</strong> você acompanha as peças de todo mundo em tempo real. No fim da semana, será impresso e exposto.</div></div></div>
+    </div>
+    <div class="tip-box"><i class="ti ti-bulb" style="color:#7F77DD;flex-shrink:0;margin-top:1px;font-size:18px"></i><div class="tip-text"><strong>Dica para uma boa história:</strong> seja específico e breve. "Entregamos o projeto 2 semanas antes do prazo e o cliente ligou para agradecer pessoalmente" é muito mais marcante do que "sempre entregamos resultados."</div></div>
+    <div class="deadline-box"><p>Votação do título encerra em <strong>20/05/2026 às 12h</strong></p><p style="margin-top:4px;font-size:12px;color:#7F77DD">As histórias podem ser adicionadas durante toda a semana</p></div>
+    <button class="btn-hero" onclick="showTab('vote')"><i class="ti ti-arrow-right"></i> Começar — votar no título</button>
+  </div>
+
+  <div id="tab-vote" class="section" style="display:none">
+    <div style="text-align:center"><div class="deadline-badge"><i class="ti ti-calendar"></i> Votação encerra 20/05/2026 às 12h</div></div>
+    <div class="countdown" id="countdown"></div>
+    <div class="voting-closed" id="voting-closed-msg"><i class="ti ti-lock"></i> Votação encerrada — título definido pelo time!</div>
+    <div class="total-votes" id="total-votes" style="display:none"></div>
+    <div id="vote-options-wrap"></div>
+    <div id="custom-wrap"><hr class="divider"><div class="field"><label>Ou escreva sua própria sugestão de título</label><div class="custom-input-wrap"><input type="text" id="custom-title-inp" placeholder="Sua sugestão..." maxlength="120"/><button onclick="addCustomTitle()">Sugerir</button></div></div></div>
+    <button class="btn-primary" id="vote-btn" onclick="submitVote()"><i class="ti ti-check"></i> Confirmar voto</button>
+    <div class="success-msg" id="vote-success"><i class="ti ti-check"></i> Voto registrado! Agora adicione sua história.</div>
+    <div id="after-vote" style="display:none;margin-top:1rem;text-align:center">
+      <button class="btn-hero" onclick="showTab('form')" style="max-width:320px;margin:0 auto"><i class="ti ti-pencil"></i> Próximo — adicionar minha história</button>
+    </div>
+  </div>
+
+  <div id="tab-form" class="section" style="display:none">
+    <div class="info-banner"><i class="ti ti-info-circle" style="flex-shrink:0;margin-top:1px;color:#7F77DD"></i><span>Você pode adicionar <strong style="color:#1a1a1a">quantas histórias quiser</strong> — cada uma vira uma peça diferente no mural, salva e visível para todo o time!</span></div>
+    <div class="field"><label>Sua foto <span style="color:#aaa;font-size:12px;font-weight:400">(opcional)</span></label>
+      <div class="photo-area" id="photo-area">
+        <input type="file" id="photo-input" accept="image/*" onchange="handlePhoto(event)"/>
+        <img id="photo-preview" class="photo-preview" src="" alt="preview"/>
+        <div id="photo-placeholder"><i class="ti ti-camera" style="font-size:28px;color:#aaa;display:block;margin-bottom:6px"></i><div class="photo-upload-text"><strong>Clique para adicionar sua foto</strong><br>JPG ou PNG — aparece na sua peça do mural</div></div>
+      </div>
+    </div>
+    <div class="field"><label>Seu nome</label><input type="text" id="inp-name" placeholder="Ex: Ana Lima" maxlength="40"/></div>
+    <div class="field"><label>Sua história com o cliente <span style="color:#aaa;font-size:12px;font-weight:400">(máx. 200 caracteres)</span></label><textarea id="inp-story" placeholder="Conte um momento marcante, um desafio superado ou um resultado que te orgulha..." maxlength="200"></textarea><div id="char-count" style="font-size:12px;color:#aaa;text-align:right;margin-top:4px">0/200</div></div>
+    <div class="field"><label>Emoji da sua peça</label><div class="emoji-grid" id="emoji-grid"></div></div>
+    <div class="field"><label>Cor da sua peça</label><div class="color-grid" id="color-grid"></div></div>
+    <button class="btn-primary" onclick="addPiece()"><i class="ti ti-puzzle"></i> Adicionar ao mural</button>
+    <div class="success-msg" id="piece-success"><i class="ti ti-check"></i> Peça adicionada! Quer contar mais uma? Preencha novamente.</div>
+  </div>
+
+  <div id="tab-mural" style="display:none">
+    <div class="mural-header">
+      <div class="mural-title-display" id="mural-title-display">Gestão de Projetos — Mural do Orgulho</div>
+      <div class="mural-subtitle">Nossos clientes, nossas histórias · Bruning</div>
+      <div><span class="count-badge"><i class="ti ti-puzzle"></i> <span id="count-num">0</span> histórias</span></div>
+    </div>
+    <div id="mural-loading" class="loading-state"><i class="ti ti-loader"></i> Carregando histórias do time...</div>
+    <div id="mural-container" style="display:none"></div>
+    <button class="btn-print" onclick="window.print()"><i class="ti ti-printer"></i> Imprimir mural</button>
+  </div>
+</div>
+
+<script type="module">
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, doc, setDoc } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+
+const firebaseConfig = {
+  apiKey: "AIzaSyCfEODmHBouEaphM7LIlp4_wfW8heU7x7c",
+  authDomain: "mural-de-historias.firebaseapp.com",
+  projectId: "mural-de-historias",
+  storageBucket: "mural-de-historias.firebasestorage.app",
+  messagingSenderId: "387265093120",
+  appId: "1:387265093120:web:81dac6570e53e0970342e5"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+const DEADLINE = new Date('2026-05-20T12:00:00');
+const COLS = 4, PW = 190, NUB = 18;
+const CHARS_PER_LINE = 23, LINE_H = 13, TEXT_START = 103, BOT_PAD = 18, FONT_SIZE = 9.5;
+
+const titleOptions = [
+  "Nossos clientes impulsionam projetos. Projetos geram desenvolvimento. Desenvolvimento sustenta o negócio.",
+  "Cada cliente é um projeto. Cada projeto, um passo no desenvolvimento sustentável do negócio.",
+  "Clientes que confiam. Projetos que entregam. Um negócio que se desenvolve.",
+  "Gerenciar projetos é cuidar de clientes. Cuidar de clientes é sustentar o desenvolvimento."
+];
+const emojis = ['🌟','🤝','💡','🚀','❤️','🏆','🎯','💪','🌱','✨','🔥','🙌','💬','📈','🛠️','🎉','🌍','💎'];
+const colors = [
+  {bg:'#AFA9EC',text:'#26215C'},{bg:'#5DCAA5',text:'#04342C'},{bg:'#F0997B',text:'#4A1B0C'},
+  {bg:'#ED93B1',text:'#4B1528'},{bg:'#85B7EB',text:'#042C53'},{bg:'#97C459',text:'#173404'},
+  {bg:'#FAC775',text:'#412402'},{bg:'#F09595',text:'#501313'},
+];
+
+let votes = {}, selectedVote = null, hasVoted = false;
+let pieces = [], selectedEmoji = emojis[0], selectedColor = colors[0], currentPhoto = null;
+titleOptions.forEach(t => votes[t] = 0);
+
+function calcLines(story) {
+  const words = story.split(' '); let lines = [], line = '';
+  words.forEach(w => { if((line+' '+w).trim().length <= CHARS_PER_LINE){line=(line+' '+w).trim();}else{if(line)lines.push(line);line=w;} });
+  if(line)lines.push(line); return lines;
+}
+function calcPH(story){ return TEXT_START + calcLines(story).length * LINE_H + BOT_PAD; }
+
+onSnapshot(doc(db,'mural','votes'), snap => {
+  if(snap.exists()){ const d=snap.data(); Object.keys(d).forEach(k=>votes[k]=d[k]); }
+  renderVoteOptions();
+});
+
+onSnapshot(query(collection(db,'pieces'),orderBy('createdAt','asc')), snap => {
+  pieces = snap.docs.map(d=>({id:d.id,...d.data()}));
+  renderMural();
+});
+
+function isVotingClosed(){ return new Date() >= DEADLINE; }
+function updateCountdown(){
+  const el=document.getElementById('countdown');
+  if(isVotingClosed()){el.textContent='';return;}
+  const diff=DEADLINE-new Date();
+  const h=Math.floor(diff/3600000),m=Math.floor((diff%3600000)/60000),s=Math.floor((diff%60000)/1000);
+  el.innerHTML=`Tempo restante: <span>${h}h ${m}m ${s}s</span>`;
+}
+
+function renderVoteOptions(){
+  const wrap=document.getElementById('vote-options-wrap');
+  const closed=isVotingClosed(), showResults=hasVoted||closed;
+  const total=Object.values(votes).reduce((a,b)=>a+b,0);
+  const maxV=Math.max(...Object.values(votes));
+  const winner=getWinner();
+  document.getElementById('voting-closed-msg').style.display=closed?'block':'none';
+  document.getElementById('vote-btn').style.display=(closed||hasVoted)?'none':'flex';
+  document.getElementById('custom-wrap').style.display=(closed||hasVoted)?'none':'block';
+  document.getElementById('after-vote').style.display=hasVoted?'block':'none';
+  const totalEl=document.getElementById('total-votes');
+  if(showResults&&total>0){totalEl.style.display='block';totalEl.textContent=`${total} voto${total!==1?'s':''} registrado${total!==1?'s':''}`;}
+  else totalEl.style.display='none';
+  wrap.innerHTML=Object.entries(votes).map(([title,count])=>{
+    const pct=total>0?Math.round(count/total*100):0;
+    const isSel=selectedVote===title,isLead=showResults&&count===maxV&&count>0,isWin=closed&&title===winner;
+    const clickable=!closed&&!hasVoted;
+    let cls='vote-option';
+    if(isSel)cls+=' selected';if(isLead&&!closed)cls+=' leading';if(isWin)cls+=' winner';
+    return `<div class="${cls}" ${clickable?`onclick="selectVote('${title.replace(/'/g,"\\'")}')"`:''}><div class="vote-top"><div class="vote-radio"></div><div class="vote-text">${title}</div>${isLead&&!closed?'<span class="leading-badge">em 1º</span>':''}${isWin?'<span class="winner-badge">vencedor</span>':''}</div>${showResults?`<div class="vote-meta"><div class="vote-bar-wrap"><div class="vote-bar" style="width:${pct}%"></div></div><span class="vote-count">${pct}% · ${count}v</span></div>`:''}</div>`;
+  }).join('');
+  if(closed||hasVoted) updateMuralTitle();
+}
+
+window.selectVote = t=>{selectedVote=t;renderVoteOptions();}
+window.submitVote = async()=>{
+  if(!selectedVote){alert('Selecione uma opção.');return;}
+  const nv={...votes};nv[selectedVote]=(nv[selectedVote]||0)+1;
+  await setDoc(doc(db,'mural','votes'),nv);
+  hasVoted=true;
+  const msg=document.getElementById('vote-success');msg.style.display='block';setTimeout(()=>msg.style.display='none',3000);
+}
+window.addCustomTitle=()=>{
+  const inp=document.getElementById('custom-title-inp');const val=inp.value.trim();if(!val)return;
+  if(!votes[val])votes[val]=0;selectedVote=val;inp.value='';renderVoteOptions();
+}
+function getWinner(){return Object.entries(votes).sort((a,b)=>b[1]-a[1])[0]?.[0]||titleOptions[0];}
+function updateMuralTitle(){document.getElementById('mural-title-display').textContent=getWinner();}
+
+window.handlePhoto=e=>{
+  const file=e.target.files[0];if(!file)return;
+  const reader=new FileReader();
+  reader.onload=ev=>{
+    currentPhoto=ev.target.result;
+    const prev=document.getElementById('photo-preview');
+    prev.src=currentPhoto;prev.style.display='block';
+    document.getElementById('photo-placeholder').style.display='none';
+    document.getElementById('photo-area').style.borderColor='#7F77DD';
+  };
+  reader.readAsDataURL(file);
+}
+
+function puzzlePath(x,y,top,right,bottom,left,PH){
+  const w=PW,h=PH,n=NUB;let d=`M ${x} ${y} `;
+  if(top===0)d+=`L ${x+w} ${y} `;else d+=`L ${x+w*0.3} ${y} Q ${x+w*0.35} ${y+top*n} ${x+w*0.5} ${y+top*n} Q ${x+w*0.65} ${y+top*n} ${x+w*0.7} ${y} L ${x+w} ${y} `;
+  if(right===0)d+=`L ${x+w} ${y+h} `;else d+=`L ${x+w} ${y+h*0.3} Q ${x+w+right*n} ${y+h*0.35} ${x+w+right*n} ${y+h*0.5} Q ${x+w+right*n} ${y+h*0.65} ${x+w} ${y+h*0.7} L ${x+w} ${y+h} `;
+  if(bottom===0)d+=`L ${x} ${y+h} `;else d+=`L ${x+w*0.7} ${y+h} Q ${x+w*0.65} ${y+h+bottom*n} ${x+w*0.5} ${y+h+bottom*n} Q ${x+w*0.35} ${y+h+bottom*n} ${x+w*0.3} ${y+h} L ${x} ${y+h} `;
+  if(left===0)d+=`L ${x} ${y} `;else d+=`L ${x} ${y+h*0.7} Q ${x+left*n} ${y+h*0.65} ${x+left*n} ${y+h*0.5} Q ${x+left*n} ${y+h*0.35} ${x} ${y+h*0.3} L ${x} ${y} `;
+  return d+'Z';
+}
+
+function renderMural(){
+  document.getElementById('count-num').textContent=pieces.length;
+  document.getElementById('mural-loading').style.display='none';
+  document.getElementById('mural-container').style.display='block';
+  const container=document.getElementById('mural-container');
+  if(!pieces.length){container.innerHTML='<div class="empty-state"><i class="ti ti-puzzle" style="font-size:48px;color:#ddd;display:block;margin-bottom:1rem"></i><p>Nenhuma história ainda.<br>Seja o primeiro!</p></div>';return;}
+  const pad=NUB+10,rows=Math.ceil(pieces.length/COLS);
+  const rowHeights=[];
+  for(let r=0;r<rows;r++){let maxH=0;for(let c=0;c<COLS;c++){const idx=r*COLS+c;if(idx<pieces.length)maxH=Math.max(maxH,calcPH(pieces[idx].story||''));}rowHeights.push(maxH);}
+  const rowY=[pad];for(let r=1;r<rows;r++)rowY.push(rowY[r-1]+rowHeights[r-1]);
+  const svgW=COLS*PW+pad*2,svgH=rowY[rows-1]+rowHeights[rows-1]+pad;
+  function nubDir(row,col,side){
+    if(side==='top')return row===0?0:((row+col)%2===0?-1:1);
+    if(side==='bottom')return row===rows-1?0:-((row+col)%2===0?-1:1);
+    if(side==='left')return col===0?0:((row+col)%2===0?1:-1);
+    if(side==='right')return col===COLS-1?0:-((row+col)%2===0?1:-1);
+  }
+  let defs='',svgContent='';
+  pieces.forEach((p,i)=>{
+    const col=i%COLS,row=Math.floor(i/COLS),px=pad+col*PW,py=rowY[row],PH=rowHeights[row];
+    const path=puzzlePath(px,py,nubDir(row,col,'top'),nubDir(row,col,'right'),nubDir(row,col,'bottom'),nubDir(row,col,'left'),PH);
+    const clipId=`c${i}`,tx=px+PW/2;
+    defs+=`<clipPath id="${clipId}"><path d="${path}"/></clipPath>`;
+    if(p.photo)defs+=`<pattern id="ph${i}" patternUnits="userSpaceOnUse" x="${tx-28}" y="${py+12}" width="56" height="56"><image href="${p.photo}" width="56" height="56" preserveAspectRatio="xMidYMid slice"/></pattern>`;
+    svgContent+=`<path d="${path}" fill="${p.color.bg}" stroke="white" stroke-width="2.5"/>`;
+    if(p.photo){
+      svgContent+=`<circle cx="${tx}" cy="${py+40}" r="28" fill="url(#ph${i})" clip-path="url(#${clipId})"/>`;
+      svgContent+=`<circle cx="${tx}" cy="${py+40}" r="28" fill="none" stroke="white" stroke-width="2" clip-path="url(#${clipId})"/>`;
+    }else{
+      svgContent+=`<circle cx="${tx}" cy="${py+40}" r="22" fill="rgba(255,255,255,0.22)" clip-path="url(#${clipId})"/>`;
+      svgContent+=`<text x="${tx}" y="${py+49}" text-anchor="middle" font-size="20" clip-path="url(#${clipId})">👤</text>`;
+    }
+    svgContent+=`<text x="${px+PW-12}" y="${py+17}" text-anchor="middle" font-size="14" clip-path="url(#${clipId})">${p.emoji||'🌟'}</text>`;
+    svgContent+=`<text x="${tx}" y="${py+83}" text-anchor="middle" font-size="11" font-weight="600" fill="${p.color.text}" font-family="Inter,sans-serif" clip-path="url(#${clipId})">${(p.name||'').length>20?(p.name||'').slice(0,19)+'…':(p.name||'')}</text>`;
+    calcLines(p.story||'').forEach((l,li)=>{svgContent+=`<text x="${tx}" y="${py+97+li*LINE_H}" text-anchor="middle" font-size="${FONT_SIZE}" fill="${p.color.text}" font-family="Inter,sans-serif" opacity="0.9" clip-path="url(#${clipId})">${l}</text>`;});
+  });
+  const svg=`<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="${svgW}" height="${svgH}" style="max-width:100%"><defs>${defs}</defs>${svgContent}</svg>`;
+  container.innerHTML=`<div class="puzzle-wrap">${svg}</div>`;
+}
+
+window.addPiece = async()=>{
+  const name=document.getElementById('inp-name').value.trim();
+  const story=document.getElementById('inp-story').value.trim();
+  if(!name||!story){alert('Preencha seu nome e sua história.');return;}
+  await addDoc(collection(db,'pieces'),{name,story,emoji:selectedEmoji,photo:currentPhoto||null,color:{...selectedColor},createdAt:Date.now()});
+  document.getElementById('inp-story').value='';
+  document.getElementById('char-count').textContent='0/200';
+  currentPhoto=null;
+  document.getElementById('photo-preview').style.display='none';
+  document.getElementById('photo-placeholder').style.display='block';
+  document.getElementById('photo-area').style.borderColor='';
+  document.getElementById('photo-input').value='';
+  const msg=document.getElementById('piece-success');msg.style.display='block';setTimeout(()=>msg.style.display='none',3500);
+}
+
+window.showTab=tab=>{
+  ['welcome','vote','form','mural'].forEach(t=>{
+    document.getElementById('tab-'+t).style.display=t===tab?'block':'none';
+    document.getElementById('tab-btn-'+t).classList.toggle('active',t===tab);
+  });
+  if(tab==='mural') updateMuralTitle();
+}
+
+const emojiGrid=document.getElementById('emoji-grid');
+emojis.forEach(e=>{
+  const btn=document.createElement('button');
+  btn.className='emoji-btn'+(e===selectedEmoji?' selected':'');
+  btn.textContent=e;btn.type='button';
+  btn.onclick=()=>{selectedEmoji=e;document.querySelectorAll('.emoji-btn').forEach(b=>b.classList.remove('selected'));btn.classList.add('selected');};
+  emojiGrid.appendChild(btn);
+});
+const colorGrid=document.getElementById('color-grid');
+colors.forEach((c,i)=>{
+  const btn=document.createElement('button');
+  btn.className='color-btn'+(i===0?' selected':'');
+  btn.style.background=c.bg;btn.type='button';
+  btn.onclick=()=>{selectedColor=c;document.querySelectorAll('.color-btn').forEach(b=>b.classList.remove('selected'));btn.classList.add('selected');};
+  colorGrid.appendChild(btn);
+});
+document.getElementById('inp-story').addEventListener('input',function(){document.getElementById('char-count').textContent=this.value.length+'/200';});
+
+updateCountdown();
+setInterval(updateCountdown,1000);
+</script>
+</body>
+</html>
